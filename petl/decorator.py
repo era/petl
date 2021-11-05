@@ -41,7 +41,6 @@ def insert_into(table, columns, data):
 def append(table, columns):
     def wrapper(func):
         def wraps_appender(*args, **kwargs):
-            print('what')
             data = func(*args, **kwargs)
             insert_into(table, columns, data)
             return data
