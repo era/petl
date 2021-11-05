@@ -15,9 +15,10 @@ from configparser import ConfigParser
 
 config_object = ConfigParser()
 
-config_object.read(os.environ['CONFIG'])
+config_object.read(os.environ["CONFIG"])
 
-PATH_TO_DB = config_object['SQLITE']['PATH']
+PATH_TO_DB = config_object["SQLITE"]["PATH"]
+
 
 def insert_into(table, columns, data):
     sqlite_conn = sqlite3.connect(PATH_TO_DB)
@@ -25,13 +26,13 @@ def insert_into(table, columns, data):
 
     print(PATH_TO_DB)
 
-    columns_str = ', '.join(columns)
-    placeholders = ', '.join(['?'] * len(columns))
-    sql = 'INSERT INTO {table} ({columns_str}) VALUES ({placeholders})'.format(table=table, 
-                                                                                    columns_str=columns_str,
-                                                                                    placeholders=placeholders)
+    columns_str = ", ".join(columns)
+    placeholders = ", ".join(["?"] * len(columns))
+    sql = "INSERT INTO {table} ({columns_str}) VALUES ({placeholders})".format(
+        table=table, columns_str=columns_str, placeholders=placeholders
+    )
 
-    for d in data: 
+    for d in data:
         cur.execute(sql, d)
 
     sqlite_conn.commit()
@@ -44,5 +45,7 @@ def append(table, columns):
             data = func(*args, **kwargs)
             insert_into(table, columns, data)
             return data
+
         return wraps_appender
+
     return wrapper

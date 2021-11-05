@@ -7,28 +7,34 @@ import petl.decorator as petl
 
 config_object = ConfigParser()
 
-config_object.read(os.environ['CONFIG'])
+config_object.read(os.environ["CONFIG"])
+
 
 def client():
-    return  TwitterAPI(config_object["TWITTER"]["CONSUMER_KEY"], config_object["TWITTER"]["CONSUMER_SECRET"],
-                    config_object["TWITTER"]["ACCESS_TOKEN_KEY"], config_object["TWITTER"]["ACCESS_TOKEN_SECRET"]
-                    ,api_version='2')
+    return TwitterAPI(
+        config_object["TWITTER"]["CONSUMER_KEY"],
+        config_object["TWITTER"]["CONSUMER_SECRET"],
+        config_object["TWITTER"]["ACCESS_TOKEN_KEY"],
+        config_object["TWITTER"]["ACCESS_TOKEN_SECRET"],
+        api_version="2",
+    )
 
-@petl.append('twitter_followers', ['user_id', 'updated'])
+
+@petl.append("twitter_followers", ["user_id", "updated"])
 def followers():
     USER_ID = config_object["TWITTER"]["USER_ID"]
-    followers = client().request(f'users/:{USER_ID}/followers')
+    followers = client().request(f"users/:{USER_ID}/followers")
 
-    today = datetime.today().strftime('%Y-%m-%d')
+    today = datetime.today().strftime("%Y-%m-%d")
 
     output = []
     for f in followers:
-        output.append([f['id'], today])
-   
+        output.append([f["id"], today])
+
     return output
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print("Saving followers")
     followers()
     print("Saving followers done")
