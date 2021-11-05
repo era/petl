@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS twitter_followers (user_id INTEGER, updated TEXT);

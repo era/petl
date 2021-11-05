@@ -9,12 +9,21 @@ def my_function():
 """
 
 import sqlite3
+import os
+from configparser import ConfigParser
 
-PATH_TO_DB = ''
+
+config_object = ConfigParser()
+
+config_object.read(os.environ['CONFIG'])
+
+PATH_TO_DB = config_object['SQLITE']['PATH']
 
 def insert_into(table, columns, data):
     sqlite_conn = sqlite3.connect(PATH_TO_DB)
     cur = sqlite_conn.cursor()
+
+    print(PATH_TO_DB)
 
     columns_str = ', '.join(columns)
     placeholders = ', '.join(['?'] * len(columns))
@@ -28,10 +37,13 @@ def insert_into(table, columns, data):
     sqlite_conn.commit()
     sqlite_conn.close()
 
+
 def append(table, columns):
     def wrapper(func):
-        data = func()
-        insert_into(table, columns, data)
-        return data
-    
+        def wraps_appender(*args, **kwargs):
+            print('what')
+            data = func(*args, **kwargs)
+            insert_into(table, columns, data)
+            return data
+        return wraps_appender
     return wrapper
