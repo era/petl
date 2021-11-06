@@ -24,8 +24,6 @@ def insert_into(table, columns, data):
     sqlite_conn = sqlite3.connect(PATH_TO_DB)
     cur = sqlite_conn.cursor()
 
-    print(PATH_TO_DB)
-
     columns_str = ", ".join(columns)
     placeholders = ", ".join(["?"] * len(columns))
     sql = "INSERT INTO {table} ({columns_str}) VALUES ({placeholders})".format(
