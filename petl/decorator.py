@@ -6,6 +6,16 @@ def my_function():
 
     return my_array_of_data
 
+
+# If you pass last_updated_column, it will will introduce in your **kwargs
+the parameter 'updated_at' which contains the date of the last time the table was updated
+
+@append(table="tableName", columns=['user', 'updated'], 'updated')
+def my_function():
+    my_array_of_data = grab_data()
+
+    return my_array_of_data
+
 """
 
 import sqlite3
@@ -18,6 +28,8 @@ config_object = ConfigParser()
 config_object.read(os.environ["CONFIG"])
 
 PATH_TO_DB = config_object["SQLITE"]["PATH"]
+
+COL_MAX_UPDATED_DATE = 'updated_at'
 
 
 def insert_into(table, columns, data):
@@ -36,10 +48,21 @@ def insert_into(table, columns, data):
     sqlite_conn.commit()
     sqlite_conn.close()
 
+def last_updated(table, column):
+    sql = 'SELECT max({column}) from {table}'.format(table=table, column=column)
 
-def append(table, columns):
+    sqlite_conn = sqlite3.connect(PATH_TO_DB)
+    cur = sqlite_conn.cursor()
+    result = cur.execute(sql)
+    sqlite_conn.close()
+    return result[0]
+
+def append(table, columns, last_updated_column = None):
     def wrapper(func):
         def wraps_appender(*args, **kwargs):
+            if last_updated_column != None:
+                kwargs[COL_MAX_UPDATED_DATE] = last_updated(table, last_updated_column)
+
             data = func(*args, **kwargs)
             insert_into(table, columns, data)
             return data

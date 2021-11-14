@@ -33,6 +33,13 @@ def followers():
 
     return output
 
+@petl.append("twitter_likes", ["user_id", "updated"], 'updated')
+def likes(**kwargs):
+    pass
+
+@petl.append("twitter_tweets", ["user_id", "updated"], 'updated')
+def tweets(**kwargs):
+    pass
 
 if __name__ == "__main__":
     print("Saving followers")
