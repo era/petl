@@ -8,3 +8,6 @@ You probably want to fork this and adapt to your own need. If you do and need he
 
 - Pull the data I'm insterested in keeping
 - Save the data in a local database (no Cloud)
+- Build a full text search on top of it with a proper protobuf API
+- Build [checkers](https://www.github.com/era/malleable-checker) based on the data
+
