@@ -53,9 +53,10 @@ def last_updated(table, column):
 
     sqlite_conn = sqlite3.connect(PATH_TO_DB)
     cur = sqlite_conn.cursor()
-    result = cur.execute(sql)
+    cur.execute(sql)
+    date = cur.fetchone()
     sqlite_conn.close()
-    return result[0]
+    return date[0]
 
 def append(table, columns, last_updated_column = None):
     def wrapper(func):
